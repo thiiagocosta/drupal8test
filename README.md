@@ -17,11 +17,16 @@ Windows: Windows\System32\Drivers\etc\hosts
 
 ADD the line below:
 ```
-#CraftCMS Test
-127.0.0.1 local.craftcmstest.com
+#Drupal 8 Test
+127.0.0.1 local.drupal8test.com
+127.0.0.1 local.mariadb.com
 ```
 
 ##2) Execute Bash:##
 ```bash
 ./install.sh dev
 ```
+
+## Finished!! :rocket:
+
+![myImage](https://media.giphy.com/media/FACfMgP1N9mlG/giphy.gif)
