@@ -6,9 +6,9 @@
  * MariaDB: latest
  * Traefik: v2.4
 
-### Install ###
+## Install ##
 
-##1) Changing your hosts file (MANDATORY)##
+### 1) Changing your hosts file (MANDATORY) ###
 You need to go to your **/etc/hosts** <br/>
 (Using Administrator Account)
 
@@ -22,11 +22,11 @@ ADD the line below:
 127.0.0.1 local.mariadb.com
 ```
 
-##2) Execute Bash:##
+### 2) Execute Bash: ###
 ```bash
 ./install.sh dev
 ```
 
-## Finished!! :rocket:
+### Finished!! :rocket:
 
 ![myImage](https://media.giphy.com/media/FACfMgP1N9mlG/giphy.gif)
