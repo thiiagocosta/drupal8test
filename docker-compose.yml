@@ -1,0 +1,61 @@
+version: '3'
+networks:
+  main:
+
+services:
+  traefik:
+    image: "traefik:v2.4"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.http.address=:80"
+      - "--global.sendAnonymousUsage=false"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  db:
+    container_name: "${DB_HOST}"
+    image: mariadb
+    volumes:
+      - "./.data:/var/lib/mysql:rw"
+    ports:
+      - "${DB_PORT}"
+    environment:
+      MYSQL_ROOT_HOST: "${DB_HOST}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASS}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USER}"
+      MYSQL_PASSWORD: "${DB_PASS}"
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.pg-web.rule: Host(`${DB_HOST}`)
+      traefik.http.routers.pg-web.entrypoints: http
+
+  portal:
+    container_name: "${PORTAL_URL}"
+    build:
+      context: ./
+      dockerfile: ./registry/${ENVIRONMENT}/Dockerfile
+    volumes:
+      - ".:/var/www/html:rw"
+    ports:
+      - "${PORTAL_PORT}"
+    environment:
+      PORT: "${PORTAL_PORT}"
+      DEBUG: "${PORTAL_DEBUG}"
+      APP_ENV: "${ENVIRONMENT}"
+      APACHE_DOCUMENT_ROOT: "${PORTAL_DOCUMENT_ROOT}"
+      HTTP_PORTAL_URL: 'http://${PORTAL_URL}/'
+    
+    # command: ['./wait-for-it.sh', '-t', '0', '${DB_HOST}:${DB_PORT}', '--', './install.sh dev']
+    restart: unless-stopped
+    labels:
+      traefik.enable: true
+      traefik.http.routers.portal-web.rule: Host(`${PORTAL_URL}`)
+      traefik.http.routers.portal-web.entrypoints: http
+    
