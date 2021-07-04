@@ -47,3 +47,9 @@
 /robots.txt
 /update.php
 /web.config
+
+# Application
+/.DS_Store
+/.data
+.env
+/INSTALL.txt
